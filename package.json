@@ -1,0 +1,26 @@
+{
+  "name": "edgeone-makers-sdk-starter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "EdgeOne Makers SDK 上手示例：60 秒完成建项目、部署、拿访问地址",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "edgeoneContractVersion": "0.1.21",
+  "scripts": {
+    "setup:sdk": "npm --prefix ../edgeone-makers-sdk-dev/packages/typescript install && npm --prefix ../edgeone-makers-sdk-dev/packages/typescript run build",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit && tsc -p server-demo --noEmit",
+    "start": "npm run build && node --env-file-if-exists=.env dist/quickstart.js",
+    "demo:build": "tsc -p server-demo",
+    "demo": "npm run demo:build && node --env-file-if-exists=.env server-demo/dist/dev-server.js"
+  },
+  "dependencies": {
+    "@edgeone/makers-sdk": "file:../edgeone-makers-sdk-dev/packages/typescript"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

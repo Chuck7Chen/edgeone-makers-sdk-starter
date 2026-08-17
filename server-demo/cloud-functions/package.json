@@ -1,0 +1,9 @@
+{
+  "name": "edgeone-makers-sdk-server-demo-functions",
+  "private": true,
+  "type": "module",
+  "description": "EdgeOne Cloud Functions 部署单元。平台构建时按这里的依赖安装。",
+  "dependencies": {
+    "@edgeone/makers-sdk": "^0.1.0"
+  }
+}
