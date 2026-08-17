@@ -11,22 +11,13 @@ Targets contract version `0.1.21`.
 ## Prerequisites
 
 - Node.js 20.12+ (uses `--env-file-if-exists`)
-- Clone the [SDK repository](https://github.com/QT-7274/edgeone-makers-sdk-dev) next to this one. The SDK repository is private before public release, so your GitHub account needs access:
-
-```text
-Code/
-├── edgeone-makers-sdk-dev/      # SDK repository
-└── edgeone-makers-sdk-starter/  # this repository
-```
-
-If the SDK lives elsewhere, change the `file:` dependency and `setup:sdk` path in `package.json`.
+- A Makers API token
 
 ## 60 seconds to first deploy
 
 ```sh
-# 1. Build the SDK (once)
+# 1. Install dependencies
 npm install
-npm run setup:sdk
 
 # 2. Configure your token
 cp .env.example .env
@@ -115,11 +106,12 @@ See [`server-demo/README.md`](server-demo/README.md).
 
 ## SDK dependency
 
-The npm package is `@edgeone/makers-sdk`; its source lives in
+This starter depends on the published npm package `@edgeone/makers-sdk`, currently
+at `0.1.0-beta.1`. Source lives in
 [QT-7274/edgeone-makers-sdk-dev](https://github.com/QT-7274/edgeone-makers-sdk-dev).
-Example code already imports the official package name. Until it is published,
-`package.json` maps that name to the sibling source repository with a `file:` dependency.
-After publishing, replace only that dependency with the released version.
+
+The package is still a pre-release, so breaking changes between betas are possible.
+Pin an exact version if you need reproducible builds.
 
 ## What comes next
 

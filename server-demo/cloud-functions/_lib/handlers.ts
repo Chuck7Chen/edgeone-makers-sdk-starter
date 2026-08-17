@@ -153,8 +153,6 @@ async function listProjects(env: Env, trace: Trace) {
 
 async function getProject(projectId: string, env: Env, trace: Trace) {
   const client = createClient(env, trace);
-  // 已知问题：SDK v0.1.0 的 projects.get 打的是后端不存在的单数 Action
-  // DescribePagesProject，目前必定返回 Code 107。SDK 修好后这里无需改动。
   const project = await trace.record("client.projects.get", { projectId }, () =>
     client.projects.get({ projectId }),
   );

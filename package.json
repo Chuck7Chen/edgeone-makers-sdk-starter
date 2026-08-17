@@ -9,7 +9,6 @@
   },
   "edgeoneContractVersion": "0.1.21",
   "scripts": {
-    "setup:sdk": "npm --prefix ../edgeone-makers-sdk-dev/packages/typescript install && npm --prefix ../edgeone-makers-sdk-dev/packages/typescript run build",
     "build": "tsc",
     "typecheck": "tsc --noEmit && tsc -p server-demo --noEmit",
     "start": "npm run build && node --env-file-if-exists=.env dist/quickstart.js",
@@ -17,7 +16,7 @@
     "demo": "npm run demo:build && node --env-file-if-exists=.env server-demo/dist/dev-server.js"
   },
   "dependencies": {
-    "@edgeone/makers-sdk": "file:../edgeone-makers-sdk-dev/packages/typescript"
+    "@edgeone/makers-sdk": "^0.1.0-beta.1"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

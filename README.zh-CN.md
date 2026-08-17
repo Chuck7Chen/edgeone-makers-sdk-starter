@@ -11,22 +11,13 @@
 ## 前置条件
 
 - Node.js 20.12+（用到了 `--env-file-if-exists`）
-- 把 [SDK 源码仓库](https://github.com/QT-7274/edgeone-makers-sdk-dev) clone 到本仓库同级目录。SDK 正式公开前该仓库为私有仓库，GitHub 账号需要有访问权限：
-
-```text
-Code/
-├── edgeone-makers-sdk-dev/      # SDK 主仓库
-└── edgeone-makers-sdk-starter/  # 本仓库
-```
-
-如果 SDK 在别的位置，修改 `package.json` 中的 `file:` 依赖和 `setup:sdk` 路径。
+- 一个 Makers API token
 
 ## 60 秒上手
 
 ```sh
-# 1. 构建 SDK（只需一次）
+# 1. 安装依赖
 npm install
-npm run setup:sdk
 
 # 2. 配置 token
 cp .env.example .env
@@ -114,10 +105,10 @@ npm run demo   # 打开 http://localhost:8787
 
 ## SDK 依赖
 
-SDK 的 npm 包名是 `@edgeone/makers-sdk`，源码位于
-[QT-7274/edgeone-makers-sdk-dev](https://github.com/QT-7274/edgeone-makers-sdk-dev)。
-示例代码已经统一使用正式包名；正式发布前，`package.json` 通过 `file:` 依赖把包名
-映射到同级源码。发布后只需把该依赖换成正式版本，示例代码无需修改。
+本 Starter 直接依赖已发布的 npm 包 `@edgeone/makers-sdk`，当前版本 `0.1.0-beta.1`，
+源码位于 [QT-7274/edgeone-makers-sdk-dev](https://github.com/QT-7274/edgeone-makers-sdk-dev)。
+
+该包仍处于预发布阶段，beta 之间可能有破坏性变更。需要可复现的构建请锁定精确版本。
 
 ## 后续内容
 
