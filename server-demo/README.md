@@ -43,23 +43,29 @@ npm run demo
 ## 结构
 
 ```text
-server-demo/
-├── public/index.html              前端，无框架无构建，单文件
-├── dev-server.ts                  Adapter A：本地 node:http
-└── cloud-functions/               Adapter B：EdgeOne Cloud Functions 部署单元
-    ├── package.json
-    ├── api/[[default]].ts         catch-all 入口，十几行转发
-    └── _lib/                      框架无关的实现，两个 adapter 共用
-        ├── handlers.ts            路由与端点
-        ├── client.ts              Client 工厂
-        ├── trace.ts               调用观察层
-        ├── scenarios.ts           错误场景
-        ├── errors.ts              异常 → HTTP 状态码
-        └── sdk.ts                 SDK import 的唯一入口
+仓库根/
+├── edgeone.json                   部署配置：静态目录指向 server-demo/public
+├── cloud-functions/               Adapter B：EdgeOne Cloud Functions 部署单元
+│   ├── package.json
+│   ├── api/[[default]].ts         catch-all 入口，十几行转发
+│   └── _lib/                      框架无关的实现，两个 adapter 共用
+│       ├── handlers.ts            路由与端点
+│       ├── client.ts              Client 工厂
+│       ├── trace.ts               调用观察层
+│       ├── scenarios.ts           错误场景
+│       ├── errors.ts              异常 → HTTP 状态码
+│       └── sdk.ts                 SDK import 的唯一入口
+└── server-demo/
+    ├── public/index.html          前端，无框架无构建，单文件
+    └── dev-server.ts              Adapter A：本地 node:http
 ```
 
 业务逻辑全在 `_lib/` 里，两个 adapter 都只负责协议转换。`_lib/` 放在
 `cloud-functions/` 内部是必须的：平台构建时只拷贝这个目录，跨目录的相对导入会断。
+
+`cloud-functions/` 放在**仓库根**同样是必须的：EdgeOne 只扫描项目根目录下的
+`./cloud-functions/`。放在 `server-demo/` 里的话，静态页面能部署成功，但所有
+`/api/*` 会返回平台级 404 —— 函数 Builder 根本没被触发。
 
 `public/index.html` 与 Python starter 仓库里的那一份**逐字节相同**。同一个页面，
 换个后端进程照样跑——这是「两语言 SDK 语义一致」最直接的证明。
@@ -110,11 +116,25 @@ demo 不能做成纯静态页——必须有个后端替浏览器持有凭证。
 
 ## 部署到 Cloud Functions
 
-`cloud-functions/` 是按 EdgeOne 的约定组织的，可以直接部署——**但要等 SDK 发布**。
+直接把仓库导入 EdgeOne Makers 即可，构建配置已经写在仓库根的 `edgeone.json` 里：
 
-平台构建时按 `cloud-functions/package.json` 从 npm 装依赖，而
-`@edgeone/makers-sdk` 目前还没发布，够不到本仓库外的相对路径。包发布后即可部署，
-代码不用改。
+```json
+{
+  "outputDirectory": "server-demo/public",
+  "buildCommand": "",
+  "nodeVersion": "20.18.0"
+}
+```
+
+不需要构建命令 —— 页面是手写的单文件 HTML，函数的 TypeScript 由平台的 Node.js
+Builder 直接编译打包，产物落在 `cloud-functions/api-node/`，路由为 `^/api/(.*)$`。
+
+**唯一需要手动做的是配置环境变量**：在 Makers 控制台的 Production 与 Preview
+两个环境里都填上 `MAKERS_API_TOKEN`（函数通过 `context.env` 读取），并建议显式
+填 `MAKERS_REGION`，省掉 SDK 每次冷启动的区域探测请求。
+
+漏配 token 不会 404，而是所有接口返回 **HTTP 503**（`MissingTokenError`）。
+如果看到的是 404，那是路由没注册，去查 `cloud-functions/` 是不是在仓库根。
 
 另外要注意 **Edge Functions 跑不了这个 SDK**。EdgeOne 有两种函数形态：
 
@@ -127,6 +147,3 @@ demo 不能做成纯静态页——必须有个后端替浏览器持有凭证。
 SDK 依赖 `cos-nodejs-sdk-v5`、`node:fs/promises`、`node:net`，且 `package.json`
 里 `exports` 只声明了 `node` 条件，在边缘运行时里连模块解析都过不去。必须用
 Cloud Functions。
-
-部署时还需要：在 Makers 控制台配置 `MAKERS_API_TOKEN` 环境变量（函数通过
-`context.env` 读取），并把静态资源输出目录指向 `server-demo/public`。

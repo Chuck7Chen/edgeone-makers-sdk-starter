@@ -12,10 +12,11 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import { extname, join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { handleApi } from "./cloud-functions/_lib/handlers.js";
+import { handleApi } from "../cloud-functions/_lib/handlers.js";
 
 const PORT = Number(process.env["PORT"] ?? 8787);
-const PUBLIC_DIR = fileURLToPath(new URL("../public/", import.meta.url));
+// 编译产物在 dist-demo/ 下镜像仓库的目录结构，所以要多退一层才回到仓库根。
+const PUBLIC_DIR = fileURLToPath(new URL("../../server-demo/public/", import.meta.url));
 
 const MIME: Readonly<Record<string, string>> = {
   ".html": "text/html; charset=utf-8",

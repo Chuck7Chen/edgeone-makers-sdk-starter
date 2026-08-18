@@ -102,6 +102,11 @@ return value, and duration — in real time. It also lets you trigger
 npm run demo   # open http://localhost:8787
 ```
 
+It also deploys to EdgeOne Makers as-is: `edgeone.json` at the repository root
+already points the static output at `server-demo/public`, and `cloud-functions/`
+sits at the root because that is the only place EdgeOne scans for functions.
+The one manual step is setting `MAKERS_API_TOKEN` in the console.
+
 See [`server-demo/README.md`](server-demo/README.md).
 
 ## SDK dependency

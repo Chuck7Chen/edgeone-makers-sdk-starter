@@ -1,3 +1,5 @@
 .env
+.edgeone/
 dist/
+dist-demo/
 node_modules/

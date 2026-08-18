@@ -101,6 +101,10 @@ SDK 的所有失败都抛 `MakersError` 的子类，异常上带 `code`、`reque
 npm run demo   # 打开 http://localhost:8787
 ```
 
+它也可以直接部署到 EdgeOne Makers：仓库根的 `edgeone.json` 已经把静态目录指向
+`server-demo/public`，`cloud-functions/` 放在仓库根是因为 EdgeOne 只扫描这一个位置。
+唯一要手动做的是在控制台配置 `MAKERS_API_TOKEN`。
+
 详见 [`server-demo/README.md`](server-demo/README.md)。
 
 ## SDK 依赖
